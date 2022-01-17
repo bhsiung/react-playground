@@ -6,6 +6,7 @@
   --row-size: 3;
   --board-width: calc(var(--cell-size) * var(--col-size) + ( 1 + var(--col-size)) * var(--cell-spacing));
   --board-height: calc(var(--cell-size) * var(--row-size) + ( 1 + var(--row-size)) * var(--cell-spacing));
+  --transition-delay: 100ms;
   width: var(--board-width);
   font-size: 4vw;
   margin-bottom: 10vw;
@@ -74,7 +75,7 @@ h1 {
   --j: 4;
 }
 .sliding-puzzle__cell {
-  transition: top 200ms ease-out, left 200ms ease-out;
+  transition: top var(--transition-delay) ease-out, left var(--transition-delay) ease-out;
   position: absolute;
   width: 10vw;
   height: 10vw;

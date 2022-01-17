@@ -16,20 +16,26 @@ interface BoardMovement {
 }
 
 let tried = 0
+let MAX_RETRY = 10000
+const THRESHOLD = 300
 
-export function slidingPuzzle(board: number[][]): string {
+export async function slidingPuzzle(board: number[][]): Promise<string> {
   tried = 0
   const queue: BoardMovement[] = [{ board: board, direction: "" }];
   const visited = new Set<string>();
   while (queue.length > 0) {
+    if (tried++ > MAX_RETRY) {
+      throw new Error('retry exhausted')
+    }
     const currentBoardMovement = queue.shift() as BoardMovement;
+    // const currentBoardMovement = queue.pop() as BoardMovement;
     // console.log('pop', currentBoardMovement)
     const neighborMovements: BoardMovement[] = findConnections(
       currentBoardMovement.board
     );
     for (let neighborMovement of neighborMovements) {
-      const neighborBoardString = JSON.stringify(neighborMovement.board);
-      if (!visited.has(neighborBoardString)) {
+      const neighborBoardString = boardToString(neighborMovement.board);
+      if (neighborMovement.direction.length < THRESHOLD && !visited.has(neighborBoardString)) {
         visited.add(neighborBoardString);
         const accumulatedDirection =
           currentBoardMovement.direction + neighborMovement.direction;
@@ -49,8 +55,7 @@ export function slidingPuzzle(board: number[][]): string {
     }
   }
 
-  console.log("not found", visited);
-  return "";
+  throw new Error('no more moves')
 }
 function findConnections(board: number[][]): BoardMovement[] {
   // TODO optimized for a better performance
@@ -112,10 +117,13 @@ export function findZero(board: number[][]): Pos {
   }
   throw new Error("no zero found in the board");
 }
-function puzzleIsResolved(board: number[][]): boolean {
-  if (tried > 100) {
-    console.log('retry exhausted', tried)
-    return true
+export function puzzleIsResolved(board: number[][]): boolean {
+  const json = boardToString(board);
+  if (json === '|1,2,3|4,5,6|8,7,0') {
+    throw new Error('puzzle is not solvable')
   }
-  return JSON.stringify(board) === "[[1,2,3],[4,5,6],[7,8,0]]";
+  return json === "|1,2,3|4,5,6|7,8,0";
 }
+function boardToString(board: number[][]): string {
+  return board.reduce((acc:string, row: number[]) => acc + '|' + row.join(','), '')
+} 
