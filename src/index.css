@@ -6,15 +6,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-@keyframes spin-loading {
-  from {
-    transform: rotateZ(0);
-  }
-  to {
-    transform: rotateZ(360deg);
-  }
+nav {
+  padding: 1rem;
+  box-shadow: 0 0 0 1px #ccc;
+  font-size: 16px;
+  display: flex;
+  gap: 1rem;
 }
+nav > a {
+  color: #444;
+  text-decoration: none;
+}
+
 .bd {
   display: flex;
   justify-content: center;
