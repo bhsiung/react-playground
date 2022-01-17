@@ -1,0 +1,28 @@
+.loader-container {
+  position: relative;
+}
+.loader {
+  top: calc(50% - 10px);
+  left: calc(50% - 20px);
+  display: inline-flex;
+  position: absolute;
+  z-index: 1;
+  animation: 2s spin-loading infinite linear;
+}
+.loader::after,
+.loader::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.loader::before {
+  background: rgba(0, 100, 200, 0.5);
+  margin-right: -10px;
+}
+.loader::after {
+  background: rgba(255, 0, 0, 0.5);
+}
+
+
