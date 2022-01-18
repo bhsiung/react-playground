@@ -1,13 +1,13 @@
 import {
   BusStop,
-  toGraph,
-  dfs,
-  countRoutes,
+  // toGraph,
+  // dfs,
+  // countRoutes,
   numBusesToDestination,
 } from "./bus-route";
 
 describe("test findOrder", () => {
-  it("can count routes", () => {
+  it.skip("can count routes", () => {
     expect(
       numBusesToDestination(
         [
@@ -32,7 +32,7 @@ describe("test findOrder", () => {
     ).toBe(4);
   });
 
-  it("negative tests", () => {
+  it.skip("negative tests", () => {
     expect(
       numBusesToDestination(
         [[22], [1, 2, 7], [3, 6, 7], [6, 8, 9, 10], [10, 11, 12, 13]],

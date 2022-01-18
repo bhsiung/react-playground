@@ -1,0 +1,21 @@
+[
+  "a",
+  "abcd.",
+  "abcd",
+  ".b.d",
+  "bcda",
+  "abc*a",
+  "abc*ca",
+  "abd*ca",
+  "abc*",
+  "abc*d*",
+  "abc*d*.*",
+  "ab.*cd",
+  "a.*d",
+  "a.*",
+  ".*d",
+  ".*",
+  "ak*.*cda*",
+  "a*.*cda*o",
+  "czxxczxa*.*cda*"
+]

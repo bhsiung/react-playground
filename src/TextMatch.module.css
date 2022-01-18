@@ -1,0 +1,50 @@
+.main {
+  font-size: 4vw;
+}
+.fieldset {
+  box-shadow: 0 0 0 1px #ccc;
+  border: 0;
+  font-size: max(16px, 2vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 1rem;
+  gap: 1rem;
+  margin-bottom: 2vw;
+}
+.patternContainer {
+  margin: 0;
+  padding: 0;
+}
+.radioCard {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  display: block;
+  line-height: 0;
+}
+.radioCard:checked ~ label {
+  background-color: #eaa;
+  color: #fff;
+}
+.radioCard ~ label {
+  border-radius: 5px;
+  background-color: #eee;
+  padding: .5rem;
+  display: block;
+}
+.textInput {
+  transition: 100ms ease-in box-shadow;
+  border: 0;
+  font-size: max(35px, 4vw);
+  padding: .5em;
+  width: 100%;
+  box-sizing: border-box;
+}
+.textInput[data-valid="valid"] {
+  box-shadow: 0 0 0 5px #2E8BC0 inset;
+  color: #2E8BC0;
+}
+.textInput[data-valid="invalid"] {
+  box-shadow: 0 0 0 5px #F652A0 inset;
+  color: #F652A0;
+}

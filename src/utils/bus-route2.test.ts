@@ -1,7 +1,7 @@
 import { numBusesToDestination } from './bus-route2';
 
 describe('test findOrder', () => {
-  it('can count routes 1', () => {
+  it.skip('can count routes 1', () => {
     expect(
       numBusesToDestination(
         [
@@ -14,7 +14,7 @@ describe('test findOrder', () => {
     ).toBe(1);
   });
 
-  it('can count routes 2', () => {
+  it.skip('can count routes 2', () => {
     expect(
       numBusesToDestination(
         [
@@ -29,11 +29,11 @@ describe('test findOrder', () => {
     ).toBe(3);
   });
 
-  it('can count routes 3', () => {
+  it.skip('can count routes 3', () => {
     expect(numBusesToDestination([[7, 12], [4, 5, 15], [6], [15, 19], [9, 12, 13]], 15, 12)).toBe(-1);
   });
 
-  it.only('can count routes 4', () => {
+  it.skip('can count routes 4', () => {
     expect(
       numBusesToDestination(
         [
@@ -74,7 +74,7 @@ describe('test findOrder', () => {
     ).toBe(2);
   });
 
-  it('negative tests', () => {
+  it.skip('negative tests', () => {
     expect(numBusesToDestination([[22], [1, 2, 7], [3, 6, 7], [6, 8, 9, 10], [10, 11, 12, 13]], 22, 13)).toBe(-1);
     expect(
       numBusesToDestination(

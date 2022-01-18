@@ -24,6 +24,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "volta": {
+    "node": "16.13.2"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
