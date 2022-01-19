@@ -25,26 +25,28 @@
 .radioCard:checked ~ label {
   background-color: #eaa;
   color: #fff;
+  text-shadow: 1px 1px 4px #67595E;
 }
 .radioCard ~ label {
+  transition: 220ms ease-in all;
   border-radius: 5px;
   background-color: #eee;
-  padding: .5rem;
+  padding: 0.5rem;
   display: block;
 }
 .textInput {
-  transition: 100ms ease-in box-shadow;
+  transition: 220ms ease-in all;
   border: 0;
   font-size: max(35px, 4vw);
-  padding: .5em;
+  padding: 0.5em;
   width: 100%;
   box-sizing: border-box;
 }
-.textInput[data-valid="valid"] {
-  box-shadow: 0 0 0 5px #2E8BC0 inset;
-  color: #2E8BC0;
+.textInput[data-valid='valid'] {
+  box-shadow: 0 0 0 5px #2e8bc0 inset;
+  color: #2e8bc0;
 }
-.textInput[data-valid="invalid"] {
-  box-shadow: 0 0 0 5px #F652A0 inset;
-  color: #F652A0;
+.textInput[data-valid='invalid'] {
+  box-shadow: 0 0 0 5px #f652a0 inset;
+  color: #f652a0;
 }
