@@ -1,76 +1,57 @@
-interface Connection {
-  isObstacle: boolean
-  pos: Pos
+interface QueueItem {
+  i: number
+  j: number
+  stepCount: number
+  obstacleCount: number
 }
 type Pos = [number, number]
 
-export function shortestPath(
-  grid: number[][],
-  k: number,
-  visited = new Set<string>(),
-  queue: Pos[] = [],
-  pathMap: Record<string, string> = {}
-): number {
+export function shortestPath(grid: number[][], k: number): number {
+  const queue: QueueItem[] = [{ i: 0, j: 0, stepCount: -1, obstacleCount: 0 }]
   const shortestPossiblePath = grid.length + grid[0].length - 2
+  const visited = new Set<string>()
   if (shortestPossiblePath === 0) return 0
-  let bestPath = Number.MAX_SAFE_INTEGER
-  if (queue.length === 0) queue.push([0, 0])
+
   while (queue.length > 0) {
-    const tile = queue.shift() as Pos
-    const tilePosString = tile.join(',')
-    const connections = findConnections(grid, tile)
-    // finish early if connection include destination
-    for (let connection of connections) {
-      if (
-        connection.pos[0] === grid.length - 1 &&
-        connection.pos[1] === grid[0].length - 1
-      ) {
-        // +1 because the endPoint is tile, which is the block before the destination
-        return Math.min(getPath(pathMap, tilePosString) + 1, bestPath)
-      }
+    const current = queue.shift() as QueueItem
+    let { i, j, stepCount, obstacleCount } = current
+    const currentString = `${i},${j},${obstacleCount}`
+    stepCount++
+    // hit obstacle
+    if (grid[i][j] === 1) obstacleCount += 1
+    // run out of obstcle-elimition quota
+    if (obstacleCount > k) continue
+    // is visited
+    if (visited.has(currentString)) continue
+    // hit the end
+    if (i === grid.length - 1 && j === grid[0].length - 1) {
+      return stepCount
     }
 
-    for (let connection of connections) {
-      const posString = connection.pos.join(',')
-      if (!visited.has(posString)) {
-        visited.add(posString)
-        pathMap[posString] = tilePosString
-        if (connection.isObstacle) {
-          // Fork!!!
-          if (k > 0) {
-            // const pathIfEliminate = 99
-            const pathIfEliminate = shortestPath(
-              grid,
-              k - 1,
-              cloneVisited(visited),
-              [...queue, connection.pos],
-              { ...pathMap }
-            )
-            if (pathIfEliminate > -1) {
-              bestPath = Math.min(pathIfEliminate, bestPath)
-              if (bestPath <= shortestPossiblePath) return bestPath
-            }
-          }
-        } else {
-          visited.add(posString)
-          queue.push(connection.pos)
-        }
-      }
+    visited.add(currentString)
+    const connections = findConnections(grid, [i, j])
+    for (let [_i, _j] of connections) {
+      queue.push({
+        i: _i,
+        j: _j,
+        stepCount,
+        obstacleCount,
+      })
     }
   }
 
   // unable to get path
-  return Math.min(-1, bestPath)
+  return -1
 }
 
-export function findConnections(grid: number[][], [i, j]: Pos): Connection[] {
+export function findConnections(grid: number[][], [i, j]: Pos): Pos[] {
   const vectors: Pos[] = [
     [-1, 0],
     [1, 0],
     [0, -1],
     [0, 1],
   ]
-  const connections: Connection[] = []
+  const connections: Pos[] = []
   for (let [offsetI, offsetJ] of vectors) {
     if (
       i + offsetI >= 0 &&
@@ -83,10 +64,7 @@ export function findConnections(grid: number[][], [i, j]: Pos): Connection[] {
         grid[newPos[0]] !== undefined &&
         grid[newPos[0]][newPos[1]] !== undefined
       ) {
-        connections.push({
-          pos: newPos,
-          isObstacle: grid[newPos[0]][newPos[1]] === 1,
-        })
+        connections.push(newPos)
       }
     }
   }
