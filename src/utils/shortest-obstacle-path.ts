@@ -16,6 +16,7 @@ export function shortestPath(
   if (queue.length === 0) queue.push([0, 0])
   while (queue.length > 0) {
     const tile = queue.shift() as Pos
+    const tilePosString = tile.join(',')
     const connections = findConnections(grid, tile)
     // finish early if connection include destination
     for (let connection of connections) {
@@ -23,21 +24,26 @@ export function shortestPath(
         connection.pos[0] === grid.length - 1 &&
         connection.pos[1] === grid[0].length - 1
       ) {
-        return Math.min(getPath(pathMap, tile.join(',')), bestPath)
+        // +1 because the endPoint is tile, which is the block before the destination
+        return Math.min(getPath(pathMap, tilePosString) + 1, bestPath)
       }
     }
 
     for (let connection of connections) {
       const posString = connection.pos.join(',')
       if (!visited.has(posString)) {
+        visited.add(posString)
+        pathMap[posString] = tilePosString
         if (connection.isObstacle) {
+          // Fork!!!
           if (k > 0) {
+            // const pathIfEliminate = 99
             const pathIfEliminate = shortestPath(
               grid,
               k - 1,
-              cloneVisited(visited, connection.pos),
+              cloneVisited(visited),
               [...queue, connection.pos],
-              { ...pathMap, posString: tile.join(',') }
+              { ...pathMap }
             )
             bestPath = Math.min(pathIfEliminate, bestPath)
             if (bestPath <= shortestPossiblePath) return bestPath
@@ -45,7 +51,6 @@ export function shortestPath(
         } else {
           visited.add(posString)
           queue.push(connection.pos)
-          pathMap[posString] = tile.join(',')
         }
       }
     }
@@ -55,7 +60,7 @@ export function shortestPath(
   return Math.min(-1, bestPath)
 }
 
-function findConnections(grid: number[][], [i, j]: Pos): Connection[] {
+export function findConnections(grid: number[][], [i, j]: Pos): Connection[] {
   const vectors: Pos[] = [
     [-1, 0],
     [1, 0],
@@ -71,28 +76,38 @@ function findConnections(grid: number[][], [i, j]: Pos): Connection[] {
       j + offsetJ <= grid[0].length - 1
     ) {
       const newPos: Pos = [i + offsetI, j + offsetJ]
-      connections.push({
-        pos: newPos,
-        isObstacle: grid[newPos[0]][newPos[1]] === 1,
-      })
+      if (
+        grid[newPos[0]] !== undefined &&
+        grid[newPos[0]][newPos[1]] !== undefined
+      ) {
+        connections.push({
+          pos: newPos,
+          isObstacle: grid[newPos[0]][newPos[1]] === 1,
+        })
+      }
     }
   }
 
   return connections
 }
-function cloneVisited(visited: Set<string>, posToAdd: Pos): Set<string> {
+export function cloneVisited(
+  visited: Set<string>,
+  posStr?: string
+): Set<string> {
   const newSet = new Set<string>()
   visited.forEach((item) => newSet.add(item))
-  newSet.add(posToAdd.join(','))
+  if (posStr) newSet.add(posStr)
   return newSet
 }
 
-export function getPath(pathMap: Record<string, string>, endPoint: Pos): number {
-  let posStr = endPoint.join(',')
+export function getPath(
+  pathMap: Record<string, string>,
+  posStr: string
+): number {
   let count = 0
   while (posStr !== '0,0') {
     posStr = pathMap[posStr]
     count++
   }
-  return count + 1
+  return count
 }
