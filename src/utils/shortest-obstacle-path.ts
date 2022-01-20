@@ -12,6 +12,7 @@ export function shortestPath(
   pathMap: Record<string, string> = {}
 ): number {
   const shortestPossiblePath = grid.length + grid[0].length - 2
+  if (shortestPossiblePath === 0) return 0
   let bestPath = Number.MAX_SAFE_INTEGER
   if (queue.length === 0) queue.push([0, 0])
   while (queue.length > 0) {
@@ -45,8 +46,10 @@ export function shortestPath(
               [...queue, connection.pos],
               { ...pathMap }
             )
-            bestPath = Math.min(pathIfEliminate, bestPath)
-            if (bestPath <= shortestPossiblePath) return bestPath
+            if (pathIfEliminate > -1) {
+              bestPath = Math.min(pathIfEliminate, bestPath)
+              if (bestPath <= shortestPossiblePath) return bestPath
+            }
           }
         } else {
           visited.add(posString)
