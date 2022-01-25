@@ -58,8 +58,6 @@ n: number of logs in the input
 
 */
 
-import { argv0 } from 'process'
-
 type SessionRange = [number, number]
 
 export function convert(logs: string[][]): Record<string, SessionRange> {
@@ -81,9 +79,7 @@ export function convert(logs: string[][]): Record<string, SessionRange> {
 // console.log(convert(logs2))
 // console.log(convert(logs3))
 
-export function most_requested_resource(
-  logs: [string, string, string, number][]
-): [string, number] {
+export function most_requested_resource(logs: string[][]): [string, number] {
   const report: Record<string, number> = {}
   const data = logs
     .map(([timeString, , resource]) => {

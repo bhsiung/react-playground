@@ -62,7 +62,7 @@ describe('convert', () => {
 })
 
 describe('most_requested_resource', () => {
-  it.skip('works', () => {
+  it('works', () => {
     expect(most_requested_resource(logs2)).toEqual(['resource_3', 4])
     expect(
       most_requested_resource([
