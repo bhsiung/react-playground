@@ -2,7 +2,8 @@ import { useState } from 'react'
 import style from './TextMatch.module.css'
 import patterns from './data/text-match-mock.json'
 import { isMatch } from './utils/regex-match'
-export default function () {
+
+function TextMatch() {
   const [text, setText] = useState('abcd')
   const [activePattern, setActivePattern] = useState(0)
   return (
@@ -41,3 +42,5 @@ export default function () {
     setText(e.target.value)
   }
 }
+
+export default TextMatch

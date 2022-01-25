@@ -5,7 +5,7 @@ interface LoaderProps {
   isLoading: boolean
   children: ReactChild
 }
-export default function ({ children, isLoading }: LoaderProps) {
+function Loader ({ children, isLoading }: LoaderProps) {
   return (
     <div className="loader-container">
       {isLoading && <span className="loader"></span>}
@@ -13,3 +13,5 @@ export default function ({ children, isLoading }: LoaderProps) {
     </div>
   )
 }
+
+export default Loader
