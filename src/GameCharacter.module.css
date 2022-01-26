@@ -1,0 +1,44 @@
+.cardContainer {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card {
+  --avatar-size: 300px;
+  display: flex;
+  flex-direction: column;
+  border: #666 solid 1px;
+}
+.card figure {
+  background: #fff;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  margin: 0;
+}
+.card figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.card dd {
+  padding: 0;
+  margin: 0;
+  font-size: 40px;
+  font-weight: 900;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+  color: #ffd500;
+  font-style: italic;
+}
+.card[data-is-weak="true"] dd {
+  color: #dfdfdf;
+}
+.card dl {
+  padding: 20px;
+  margin: 0;
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+  grid-auto-flow: column;
+  align-items: end;
+  justify-content: space-between;
+}
