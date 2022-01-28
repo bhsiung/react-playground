@@ -5,17 +5,25 @@ import SlidingPuzzle from './SlidingPuzzle'
 import TextMatch from './TextMatch'
 import reportWebVitals from './reportWebVitals'
 import GameCharacrerPage from './GameCharacter'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import GiffyPage from './GiffyPage'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from 'react-router-dom'
 import App from './App'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Router>
+function RouterWrapper() {
+  return (
+    <>
       <nav>
         <Link to="/">home</Link>
         <Link to="/sliding-puzzle">sliding puzzle</Link>
         <Link to="/text-match">text match</Link>
         <Link to="/game-character">Game Character</Link>
+        <Link to="/giffy">Giffy</Link>
       </nav>
       <main className="bd">
         <Routes>
@@ -23,8 +31,17 @@ ReactDOM.render(
           <Route path="/sliding-puzzle" element={<SlidingPuzzle />} />
           <Route path="/text-match" element={<TextMatch />} />
           <Route path="/game-character" element={<GameCharacrerPage />} />
+          <Route path="/giffy" element={<GiffyPage />} />
         </Routes>
       </main>
+    </>
+  )
+}
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Router>
+      <RouterWrapper />
     </Router>
   </React.StrictMode>,
   document.getElementById('root')
