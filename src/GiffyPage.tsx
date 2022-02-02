@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import style from './GiffyPage.module.css'
+import Loader from './Loader'
+import { fetchImages } from './utils/search-images'
+// import { useSearchParams } from 'react-router-dom'
 
 function bearDebounce(
   fn: Function,
@@ -15,73 +17,69 @@ function bearDebounce(
 }
 
 interface GiffyImage {
-  src: string
+  imageStyle: { backgroundImage: string }
   title: string
 }
-interface GiphySearchPayload {
-  title: string
-  images: Record<string, { url: string }>
-}
-
-const GIPHY_API_KEY = 'plhBLXsAJx30wKhT00tfh1HKke2jqxc8'
+const DEBOUNCE_DELAY = 400
 let fetchTimer: number
 
 function GiffyPage() {
   const [images, setImages] = useState<GiffyImage[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
-  const term = searchParams.get('term') ?? ''
-
-  function _fetchImages(term: string): void {
-    fetch(
-      new Request(
-        `https://api.giphy.com/vterm:string1/gifs/search?api_key=${GIPHY_API_KEY}&q=${term}`
-      )
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json()
-        } else {
-          throw new Error('Something went wrong on api server!')
-        }
-      })
-      .then((response) => {
-        setImages(
-          response.data.map((data: GiphySearchPayload) => {
-            return {
-              title: data.title,
-              src: data.images.fixed_height.url,
-            }
-          })
-        )
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
-
-  function onChangeTerm(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearchParams({ term: e.target.value })
+  const [loading, setLoading] = useState(false)
+  const [term, setTerm] = useState('')
+  // const [searchParams, setSearchParams] = useSearchParams()
+  useEffect(() => {
     fetchTimer = bearDebounce(
       () => {
-        _fetchImages(e.target.value)
+        if (term.length > 0) {
+          setLoading(true)
+          fetchImages(term).then((images) => {
+            setLoading(false)
+            setImages(
+              images.map(
+                (data): GiffyImage => ({
+                  title: data.title,
+                  imageStyle: { backgroundImage: `url(${data.src})` },
+                })
+              )
+            )
+          })
+        } else {
+          setImages([])
+        }
       },
-      200,
+      DEBOUNCE_DELAY,
       fetchTimer
     )
+  }, [term])
+
+  function onChangeTerm(e: React.ChangeEvent<HTMLInputElement>) {
+    // setSearchParams({ term: e.target.value })
+    setTerm(e.target.value)
   }
 
   return (
-    <div>
+    <div className={style.imageSearch}>
       <form>
-        <input type="search" onInput={onChangeTerm} value={term} />
+        <h1 data-testid="title">Image page</h1>
+        <input
+          data-testid="search-term"
+          onInput={onChangeTerm}
+          placeholder="search for image"
+          type="search"
+          autoFocus
+          value={term}
+        />
       </form>
-      <ul className={style.grid}>
-        {images.map((image, i) => (
-          <li key={i}>
-            <img src={image.src} alt={image.title} />
-          </li>
-        ))}
-      </ul>
+      <Loader isLoading={loading}>
+        <ul className={style.grid}>
+          {images.map((image, i) => (
+            <li key={i} data-testid="image-container">
+              <figure style={image.imageStyle} data-testid="image" aria-label={image.title}></figure>
+            </li>
+          ))}
+        </ul>
+      </Loader>
     </div>
   )
 }

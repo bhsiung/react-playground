@@ -1,104 +1,132 @@
-export {}
-// enum OPT {
-  // PLUS = '+',
-  // MINUS = '-'
-// }
+export enum OPT {
+  PLUS = '+',
+  MINUS = '-',
+}
 
-// function calculate(s: string): number {
-  // console.log(s)
-  // let result = 0 // 12
-  // let operation: OPT|null = null // +
-  // let digit = null // 12
-  // let negative = false
-  // // 12 + 12 + 4
-  // for(let i=0; i<=s.length; i++) {
-    // const char = s.charAt(i) // 2
+const DEBUGGING = false
 
-    // switch (char) {
-      // case ' ': // skip white space
-        // break
-      // case '': // last char
-        // calc()
-        // break
-      // case '-': // -
-        // if (digit === null) {
-          // negative = true
-        // } else {
-          // calc()
-          // reset()
-        // }
-        // break
-      // case '+': // +
-        // calc()
-        // reset()
-        // break
-      // case '(': // ()
-        // const sub = findSub(s, i)
-        // digit = calculate(sub)
-        // i += sub.length + 1
-        // break
-      // default: // 0-9
-        // if (digit === null) digit = 0
-        // digit = digit * 10 + parseInt(char)
-        // break
-    // }
-  // }
-  // return result
-  
-  // function calc() {
-    // if (digit === null) throw new Error('missing number for the calculation')
-    
-    // if (operation) { // proceed the previous calculation
-      // if (operation === OPT.PLUS) {
-        // result += digit
-      // } else if (operation === OPT.MINUS) {
-        // result -= digit
-      // }        
-    // } else { // register digit to result
-      // result = digit
-      // if (negative) {
-        // result *= -1
-        // negative = false
-      // }
-    // }
-  // }
-  // function reset() {
-    // digit = null
-    // operation = OPT.MINUS
-  // }
-// }
+export function calculate(s: string): number {
+  const core = new CalStack() // {num: 16, operator: null}
+  let num = 0
+  let negative = false
 
-// class CalStack {
-  // private stack:[number?, OPT?] = []
-  // push ({ operator, num }: { operator: OPT, num: number }): void {
-    // const [lastNum, lastOpt] = this.stack
-    // if (num) {
-      // if (lastNum && lastOpt) {
+  s = s.replace(/\s+/, '')
 
-      // } else if (lastNum) {
-        // throw new Error('need an operator to calc')
-      // }
-    // } else if (operator) {
+  // 13+3
+  for (let i = 0; i <= s.length; i++) {
+    const char = s.charAt(i) // +
 
-    // } else {
-      // throw new Error('need either number or operator')
-    // }
-  // }
-// }
+    if (/^\d$/.test(char)) {
+      num = num * 10 + parseInt(char) // 3
+    } else {
+      if (negative && char !== '(') {
+        num *= -1
+        negative = false
+      }
+      if (i > 0) {
+        core.push({ num })
+      }
+      num = 0
+      if (char === '') {
+        return core.output()
+      } else if (char === '-') {
+        // TODO remove empty  string in the beginning
+        // we currently only support negative sign at the beginning of a line
+        if (i === 0) {
+          negative = true
+        } else {
+          core.push({ operator: OPT.MINUS })
+        }
+      } else if (char === '+') {
+        core.push({ operator: OPT.PLUS })
+      } else if (char === '(') {
+        const sub = findSub(s, i)
+        if (DEBUGGING) console.log({ sub })
+        num = calculate(sub)
+        if (negative) {
+          num *= -1
+          negative = false
+        }
+        core.push({ num })
+        i += sub.length + 1
+      } else {
+        throw new Error('the string is invalid')
+      }
+    }
+  }
 
-// function findSub(s: string, start: number): string {
-  // let stack = 0 // 0
-  // let sub = '' // '(1+2-(3-2)'
-  // for (let i = start; i < s.length; i++ ) {
-    // const char = s.charAt(i) // )
-    // if (char === '(') {
-      // stack++
-    // } else if (char === ')') {
-      // stack--
-    // }
+  throw new Error('the string is invalid')
+}
 
-    // if (stack === 0) return sub.slice(1)
-    // sub += char
-  // }
-  // throw new Error('unable to find the end')
-// }
+export class CalStack {
+  private num?: number
+  private operator?: OPT
+  push({ operator, num }: { operator?: OPT; num?: number }): void {
+    if (DEBUGGING)
+      console.log(
+        'before',
+        JSON.stringify({
+          num: this.num,
+          operator: this.operator,
+          arg: arguments[0],
+        })
+      )
+    if (num !== undefined) {
+      if (this.operator) {
+        // has both, calculate!
+        if (this.operator === OPT.MINUS) {
+          this.num = (this.num as number) - num
+        } else {
+          this.num = (this.num as number) + num
+        }
+        this.operator = undefined
+      } else {
+        // has nothing, add number
+        this.num = num
+      }
+    } else if (operator) {
+      if (this.num && this.operator) {
+        // has both!
+        throw new Error('need an number now!')
+      } else if (this.operator) {
+        throw new Error('need a number, operator is already defined')
+      } else {
+        // has no operator, add it
+        this.operator = operator
+      }
+    } else {
+      throw new Error(
+        'need either number or operator, got: ' + JSON.stringify(arguments[0])
+      )
+    }
+    if (DEBUGGING)
+      console.log(
+        'after',
+        JSON.stringify({
+          num: this.num,
+          operator: this.operator,
+          arg: arguments[0],
+        })
+      )
+  }
+  output(): number {
+    return this.num ?? 0
+  }
+}
+
+function findSub(s: string, start: number): string {
+  let stack = 0 // 0
+  let sub = '' // '(1+2-(3-2)'
+  for (let i = start; i < s.length; i++) {
+    const char = s.charAt(i) // )
+    if (char === '(') {
+      stack++
+    } else if (char === ')') {
+      stack--
+    }
+
+    if (stack === 0) return sub.slice(1)
+    sub += char
+  }
+  throw new Error('unable to find the end')
+}
