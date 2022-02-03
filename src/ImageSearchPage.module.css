@@ -1,4 +1,12 @@
 .imageSearch {
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.imageSearch form {
+  width: 60vw;
+  align-self: center;
 }
 .imageSearch input:focus {
   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5);
@@ -22,6 +30,10 @@
   margin: 0;
   gap: 1px;
   min-height: calc(var(--image-height) * 3);
+  margin: 0 auto;
+}
+.grid:empty {
+  display: none;
 }
 @media (max-width: 600px) {
   .grid {
@@ -40,7 +52,7 @@
   box-shadow: 0 0 100px 0 #000 inset;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   overflow: hidden;
 }
 .imageMeta {
@@ -67,7 +79,7 @@
 .imageMeta footer {
   display: flex;
   gap: 1em;
-  justify-content: end;
+  justify-content: flex-end;
   padding-top: 1em;
 }
 .imageActionItem {

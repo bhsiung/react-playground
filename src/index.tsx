@@ -25,7 +25,7 @@ function RouterWrapper() {
         <Link to="/game-character">Game Character</Link>
         <Link to="/image-search">Image Search</Link>
       </nav>
-      <main className="bd">
+      <main>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/sliding-puzzle" element={<SlidingPuzzle />} />

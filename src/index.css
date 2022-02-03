@@ -17,10 +17,8 @@ nav > a {
   color: #444;
   text-decoration: none;
 }
-
-.bd {
-  display: flex;
-  justify-content: center;
+main {
+  padding: 1em;
 }
 
 code {

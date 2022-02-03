@@ -1,3 +1,8 @@
+.sliding-puzzle-container {
+  display: flex;
+  justify-content: center;
+}
+
 .sliding-puzzle {
   --border: 0 0 0 1px rgba(0,0,0,.5);
   --cell-size: 10vw;

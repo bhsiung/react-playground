@@ -149,40 +149,42 @@ function Board(props: BoardProps) {
   }
   cells.sort((a, b) => a.value - b.value)
   return (
-    <div className="sliding-puzzle">
-      <h1>Sliding puzzle</h1>
-      <Loader isLoading={props.isLoading}>
-        <div
-          className="sliding-puzzle__board"
-          onClick={onClickBoard}
-          onKeyUp={onKeyUp}
-        >
-          {cells.map((cell) => (
-            <span
-              key={cell.value}
-              className="sliding-puzzle__cell"
-              data-value={cell.value}
-              data-i={cell.i}
-              data-j={cell.j}
-            >
-              {cell.value}
-            </span>
-          ))}
+    <div className="sliding-puzzle-container">
+      <div className="sliding-puzzle">
+        <h1>Sliding puzzle</h1>
+        <Loader isLoading={props.isLoading}>
+          <div
+            className="sliding-puzzle__board"
+            onClick={onClickBoard}
+            onKeyUp={onKeyUp}
+          >
+            {cells.map((cell) => (
+              <span
+                key={cell.value}
+                className="sliding-puzzle__cell"
+                data-value={cell.value}
+                data-i={cell.i}
+                data-j={cell.j}
+              >
+                {cell.value}
+              </span>
+            ))}
+          </div>
+        </Loader>
+        <div className="sliding-puzzle__btn-set">
+          <button className="sliding-puzzle__btn" onClick={props.onReshuffle}>
+            Reshuffle
+          </button>
+          <button
+            className="sliding-puzzle__btn"
+            disabled={props.isFinished}
+            onClick={props.onAutoSolve}
+          >
+            Auto
+          </button>
         </div>
-      </Loader>
-      <div className="sliding-puzzle__btn-set">
-        <button className="sliding-puzzle__btn" onClick={props.onReshuffle}>
-          Reshuffle
-        </button>
-        <button
-          className="sliding-puzzle__btn"
-          disabled={props.isFinished}
-          onClick={props.onAutoSolve}
-        >
-          Auto
-        </button>
+        {props.isFinished && <p>done!!</p>}
       </div>
-      {props.isFinished && <p>done!!</p>}
     </div>
   )
 
