@@ -4,7 +4,6 @@ import Loader from './Loader'
 import { fetchImages } from './utils/search-images'
 // import { useSearchParams } from 'react-router-dom'
 import { AiOutlineDownload } from 'react-icons/ai'
-import { ExecFileSyncOptionsWithBufferEncoding } from 'child_process'
 
 function bearDebounce(
   fn: Function,
