@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import style from './GiffyPage.module.css'
+import style from './ImageSearchPage.module.css'
 import Loader from './Loader'
 import { fetchImages } from './utils/search-images'
 // import { useSearchParams } from 'react-router-dom'
+import { AiOutlineDownload } from 'react-icons/ai'
+import { ExecFileSyncOptionsWithBufferEncoding } from 'child_process'
 
 function bearDebounce(
   fn: Function,
@@ -16,15 +18,22 @@ function bearDebounce(
   }, waitTime) as number
 }
 
-interface GiffyImage {
-  imageStyle: { backgroundImage: string }
+interface ImageProp {
+  imageStyle: { backgroundImage: string; backgroundColor: string }
   title: string
+  webLink: string
+  user: {
+    bio: string
+    image: string
+    name: string
+    webLink: string
+  }
 }
 const DEBOUNCE_DELAY = 400
 let fetchTimer: number
 
 function GiffyPage() {
-  const [images, setImages] = useState<GiffyImage[]>([])
+  const [images, setImages] = useState<ImageProp[]>([])
   const [loading, setLoading] = useState(false)
   const [term, setTerm] = useState('')
   // const [searchParams, setSearchParams] = useSearchParams()
@@ -37,9 +46,14 @@ function GiffyPage() {
             setLoading(false)
             setImages(
               images.map(
-                (data): GiffyImage => ({
+                (data): ImageProp => ({
                   title: data.title,
-                  imageStyle: { backgroundImage: `url(${data.src})` },
+                  user: data.user,
+                  webLink: data.webLink,
+                  imageStyle: {
+                    backgroundImage: `url(${data.src})`,
+                    backgroundColor: data.color,
+                  },
                 })
               )
             )
@@ -74,8 +88,30 @@ function GiffyPage() {
       <Loader isLoading={loading}>
         <ul className={style.grid}>
           {images.map((image, i) => (
-            <li key={i} data-testid="image-container">
-              <figure style={image.imageStyle} data-testid="image" aria-label={image.title}></figure>
+            <li key={i} data-testid="image-container" style={image.imageStyle}>
+              <div className={style.imageMeta}>
+                <h3>by {image.user.name}</h3>
+                <h2 data-testid="description">{image.title}</h2>
+                <footer>
+                  <a
+                    className={style.imageActionItem}
+                    href={image.webLink}
+                    aria-label="view the original page"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <AiOutlineDownload />
+                  </a>
+                  <a
+                    href={image.user.webLink}
+                    target="_blank"
+                    className={style.imageAvatar}
+                    rel="noreferrer"
+                  >
+                    <img src={image.user.image} alt={image.user.name} />
+                  </a>
+                </footer>
+              </div>
             </li>
           ))}
         </ul>

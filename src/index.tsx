@@ -5,7 +5,7 @@ import SlidingPuzzle from './SlidingPuzzle'
 import TextMatch from './TextMatch'
 import reportWebVitals from './reportWebVitals'
 import GameCharacrerPage from './GameCharacter'
-import GiffyPage from './GiffyPage'
+import ImageSearchPage from './ImageSearchPage'
 import {
   BrowserRouter as Router,
   Routes,
@@ -23,7 +23,7 @@ function RouterWrapper() {
         <Link to="/sliding-puzzle">sliding puzzle</Link>
         <Link to="/text-match">text match</Link>
         <Link to="/game-character">Game Character</Link>
-        <Link to="/giffy">Giffy</Link>
+        <Link to="/image-search">Image Search</Link>
       </nav>
       <main className="bd">
         <Routes>
@@ -31,7 +31,7 @@ function RouterWrapper() {
           <Route path="/sliding-puzzle" element={<SlidingPuzzle />} />
           <Route path="/text-match" element={<TextMatch />} />
           <Route path="/game-character" element={<GameCharacrerPage />} />
-          <Route path="/giffy" element={<GiffyPage />} />
+          <Route path="/image-search" element={<ImageSearchPage />} />
         </Routes>
       </main>
     </>

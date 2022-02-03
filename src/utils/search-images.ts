@@ -1,15 +1,31 @@
 // const GIPHY_API_KEY = 'plhBLXsAJx30wKhT00tfh1HKke2jqxc8'
 export const ACCESS_KEY = 'FFJQuixYgNGgDz4PrQgmOAgRrCJJPz8HdsDeOlg6gd0'
 export interface SearchPayload {
-  description: string
-  urls: Record<string, string>
+  color: string
+  alt_description: string
+  urls: { small: string }
+  links: { html: string }
+  user: {
+    name: string
+    profile_image: { medium: string }
+    bio: string
+    links: { html: string }
+  }
 }
-interface GiffyImage {
+interface ImageData {
+  color: string
   src: string
   title: string
+  webLink: string
+  user: {
+    bio: string
+    image: string
+    name: string
+    webLink: string
+  }
 }
 
-export async function fetchImages(term: string): Promise<GiffyImage[]> {
+export async function fetchImages(term: string): Promise<ImageData[]> {
   const headers = new Headers()
   headers.append('Accept-Version', 'v1')
   headers.append('Authorization', `Client-ID ${ACCESS_KEY}`)
@@ -31,9 +47,19 @@ export async function fetchImages(term: string): Promise<GiffyImage[]> {
       }
     })
     .then((response) =>
-      response.results.map((data: SearchPayload) => ({
-        title: data.description,
-        src: data.urls.small,
-      }))
+      response.results.map(
+        (data: SearchPayload): ImageData => ({
+          color: data.color,
+          title: data.alt_description,
+          src: data.urls.small,
+          webLink: data.links.html,
+          user: {
+            bio: data.user.bio,
+            webLink: data.user.links.html,
+            image: data.user.profile_image.medium,
+            name: data.user.name,
+          },
+        })
+      )
     )
 }
