@@ -37,5 +37,12 @@ it('renders with or without a name', async () => {
   expect(screen.getByTestId('image-container')).toHaveStyle(
     'background-image: url(https://image.com/image0.jpg)'
   )
-  // TODO loader rendered
+  // meta rendered
+  expect(screen.getByTestId('meta')).toBeInTheDocument()
+  expect(screen.getByTestId('photo-by')).toHaveTextContent('by bear')
+  expect(screen.getByTestId('description')).toHaveTextContent('title0')
+  // author rendered
+  // author avatar rendered
+  // author avatar has link
+  // web link to the full picture rendered
 })

@@ -21,19 +21,20 @@
   transition: box-shadow 300ms ease-out;
   width: 100%;
 }
+.emptyGrid {
+  font-size: 5vw;
+  color: #aaa;
+}
 .grid {
   --image-height: 30vw;
-  width: calc(var(--image-height) * 3 + 2px);
-  grid-template-columns: 1fr 1fr 1fr;
   display: grid;
-  padding: 20px 0;
-  margin: 0;
   gap: 1px;
-  min-height: calc(var(--image-height) * 3);
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: max-content;
   margin: 0 auto;
-}
-.grid:empty {
-  display: none;
+  min-height: calc(var(--image-height) * 3);
+  padding: 20px 0;
+  width: calc(var(--image-height) * 3 + 2px);
 }
 @media (max-width: 600px) {
   .grid {
@@ -45,11 +46,23 @@
 .grid > li {
   list-style: none;
   height: var(--image-height);
+}
+.grid > li.emptyGrid {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  text-align: center;
+}
+.emptyGridIcon {
+  padding: 0;
+  margin: 0.5em 0 0;
+  font-size: 15vh;
+}
+.grid > li:not(.emptyGrid) {
+  box-shadow: 0 0 100px 0 #000 inset;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
   margin: 0;
-  box-shadow: 0 0 100px 0 #000 inset;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -67,12 +80,12 @@
 }
 .imageMeta h2 {
   color: #fff;
-  font-size: 2em;
+  font-size: clamp(1rem, 2.5vw, 2rem);
   margin: 0;
 }
 .imageMeta h3 {
   color: #fa3184;
-  font-size: 1em;
+  font-size: clamp(.5rem, 1vw, 1rem);
   line-height: 1;
   margin: 0;
 }

@@ -81,7 +81,8 @@ class BoardContainer extends React.Component<IProps, IState> {
       // assert target is valid
       const { i, j } = targetPos
       assert(isNextTo(zeroPos, targetPos), new Error('target is not movable'))
-      const targetValue = this.state.board[i][j]
+      const targetValue = this.state.board?.[i]?.[j]
+      assert(targetValue !== undefined, 'target is invalid')
       // console.log({ i, j, zeroPos, board: this.state.board });
       // TODO find a better way to get element
       document
@@ -156,7 +157,8 @@ function Board(props: BoardProps) {
           <div
             className="sliding-puzzle__board"
             onClick={onClickBoard}
-            onKeyUp={onKeyUp}
+            onKeyDown={onKeyUp}
+            tabIndex={0}
           >
             {cells.map((cell) => (
               <span
@@ -197,7 +199,15 @@ function Board(props: BoardProps) {
   }
 
   function onKeyUp(e: React.KeyboardEvent) {
-    console.log(e.code)
+    const zeroPos = findZero(props.board)
+    if (e.code === 'ArrowRight')
+      props.onSwap({ i: zeroPos.i, j: zeroPos.j - 1 })
+    else if (e.code === 'ArrowLeft')
+      props.onSwap({ i: zeroPos.i, j: zeroPos.j + 1 })
+    else if (e.code === 'ArrowUp')
+      props.onSwap({ i: zeroPos.i + 1, j: zeroPos.j })
+    else if (e.code === 'ArrowDown')
+      props.onSwap({ i: zeroPos.i - 1, j: zeroPos.j })
   }
 }
 

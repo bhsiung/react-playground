@@ -25,6 +25,22 @@ it('search images', async () => {
                 links: { html: 'https://image.com/bar.html' },
               },
             },
+            {
+              color: '#333',
+              alt_description: 'title1',
+              urls: {
+                small: 'https://image.com/image1.jpg',
+              },
+              links: {
+                html: 'https://image.com/foo.html',
+              },
+              user: {
+                name: 'bear',
+                bio: 'foo',
+                profile_image: { medium: 'https://image.com/profile/bear.jpg' },
+                links: { html: 'https://image.com/bar.html' },
+              },
+            },
           ],
         }),
     })
@@ -36,6 +52,18 @@ it('search images', async () => {
       color: '#333',
       title: 'title0',
       src: 'https://image.com/image0.jpg',
+      user: {
+        name: 'bear',
+        image: 'https://image.com/profile/bear.jpg',
+        bio: 'foo',
+        webLink: 'https://image.com/bar.html',
+      },
+      webLink: 'https://image.com/foo.html',
+    },
+    {
+      color: '#333',
+      title: 'title1',
+      src: 'https://image.com/image1.jpg',
       user: {
         name: 'bear',
         image: 'https://image.com/profile/bear.jpg',

@@ -3,7 +3,7 @@ import style from './ImageSearchPage.module.css'
 import Loader from './Loader'
 import { fetchImages } from './utils/search-images'
 // import { useSearchParams } from 'react-router-dom'
-import { AiOutlineDownload } from 'react-icons/ai'
+import { AiOutlineDownload, AiOutlineBulb } from 'react-icons/ai'
 
 function bearDebounce(
   fn: Function,
@@ -31,7 +31,7 @@ interface ImageProp {
 const DEBOUNCE_DELAY = 400
 let fetchTimer: number
 
-function GiffyPage() {
+function ImageSearchPage() {
   const [images, setImages] = useState<ImageProp[]>([])
   const [loading, setLoading] = useState(false)
   const [term, setTerm] = useState('')
@@ -85,38 +85,53 @@ function GiffyPage() {
         />
       </form>
       <Loader isLoading={loading}>
-        <ul className={style.grid}>
-          {images.map((image, i) => (
-            <li key={i} data-testid="image-container" style={image.imageStyle}>
-              <div className={style.imageMeta}>
-                <h3>by {image.user.name}</h3>
-                <h2 data-testid="description">{image.title}</h2>
-                <footer>
-                  <a
-                    className={style.imageActionItem}
-                    href={image.webLink}
-                    aria-label="view the original page"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <AiOutlineDownload />
-                  </a>
-                  <a
-                    href={image.user.webLink}
-                    target="_blank"
-                    className={style.imageAvatar}
-                    rel="noreferrer"
-                  >
-                    <img src={image.user.image} alt={image.user.name} />
-                  </a>
-                </footer>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <ImageList images={images} />
       </Loader>
     </div>
   )
 }
 
-export default GiffyPage
+export function ImageList({ images }: { images: ImageProp[] }) {
+  return (
+    <ul className={style.grid}>
+      {images.length ? (
+        images.map((image, i) => (
+          <li key={i} data-testid="image-container" style={image.imageStyle}>
+            <div className={style.imageMeta}>
+              <h3 data-testid="photo-by">by {image.user.name}</h3>
+              <h2 data-testid="description">{image.title}</h2>
+              <footer data-testid="meta">
+                <a
+                  className={style.imageActionItem}
+                  href={image.webLink}
+                  aria-label="view the original page"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <AiOutlineDownload />
+                </a>
+                <a
+                  href={image.user.webLink}
+                  target="_blank"
+                  className={style.imageAvatar}
+                  rel="noreferrer"
+                >
+                  <img src={image.user.image} alt={image.user.name} />
+                </a>
+              </footer>
+            </div>
+          </li>
+        ))
+      ) : (
+        <li className={style.emptyGrid}>
+          <p className={style.emptyGridIcon}>
+            <AiOutlineBulb />
+          </p>
+          the list is empty
+        </li>
+      )}
+    </ul>
+  )
+}
+
+export default ImageSearchPage
