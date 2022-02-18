@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import style from './ImageSearchPage.module.css'
 import Loader from './Loader'
 import { fetchImages } from './utils/search-images'
-// import { useSearchParams } from 'react-router-dom'
 import { AiOutlineDownload, AiOutlineBulb } from 'react-icons/ai'
+import { useSearchParams } from 'react-router-dom'
 
 function bearDebounce(
   fn: Function,
@@ -34,8 +34,8 @@ let fetchTimer: number
 function ImageSearchPage() {
   const [images, setImages] = useState<ImageProp[]>([])
   const [loading, setLoading] = useState(false)
-  const [term, setTerm] = useState('')
-  // const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [term, setTerm] = useState(searchParams.get('term') ?? '')
   useEffect(() => {
     fetchTimer = bearDebounce(
       () => {
@@ -67,7 +67,7 @@ function ImageSearchPage() {
   }, [term])
 
   function onChangeTerm(e: React.ChangeEvent<HTMLInputElement>) {
-    // setSearchParams({ term: e.target.value })
+    setSearchParams({ term: e.target.value })
     setTerm(e.target.value)
   }
 

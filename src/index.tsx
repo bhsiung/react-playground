@@ -11,9 +11,9 @@ import {
   Routes,
   Route,
   Link,
-  // useLocation,
 } from 'react-router-dom'
 import App from './App'
+import SigninPage from './SignIn'
 
 function RouterWrapper() {
   return (
@@ -24,6 +24,7 @@ function RouterWrapper() {
         <Link to="/text-match">text match</Link>
         <Link to="/game-character">Game Character</Link>
         <Link to="/image-search">Image Search</Link>
+        <Link to="/sign">Sign in</Link>
       </nav>
       <main>
         <Routes>
@@ -32,6 +33,7 @@ function RouterWrapper() {
           <Route path="/text-match" element={<TextMatch />} />
           <Route path="/game-character" element={<GameCharacrerPage />} />
           <Route path="/image-search" element={<ImageSearchPage />} />
+          <Route path="/Sign" element={<SigninPage />} />
         </Routes>
       </main>
     </>

@@ -1,7 +1,9 @@
 import { render, fireEvent, screen } from '@testing-library/react'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { MemoryRouter } from 'react-router-dom'
 import ImageSearchPage from './ImageSearchPage'
 import * as searchImage from './utils/search-images'
-
+expect.extend(toHaveNoViolations)
 it('renders with or without a name', async () => {
   jest.spyOn(searchImage, 'fetchImages').mockImplementation(() =>
     Promise.resolve([
@@ -19,7 +21,14 @@ it('renders with or without a name', async () => {
       },
     ])
   )
-  render(<ImageSearchPage />)
+  const { container } = render(
+    <MemoryRouter>
+      <ImageSearchPage />
+    </MemoryRouter>
+  )
+  const results = await axe(container)
+
+  expect(results).toHaveNoViolations()
   expect(screen.getByTestId('title')).toHaveTextContent('Image page')
   expect(screen.getByTestId('search-term')).toHaveAttribute('type', 'search')
   expect(screen.getByTestId('search-term')).toHaveValue('')
